@@ -1,65 +1,116 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import Taskbar from "../components/taskbar";
+import DesktopIcon from "../components/DesktopIcon";
+import WindowBox from "../components/WindowBox";
+import BSOD from "../components/Bsod";
+import BootScreen from "../components/BootScreen";
+import ShutdownScreen from "../components/ShutdownScreen";
+import LoginScreen from "../components/LoginScreen"; /* 1. IMPORT ADICIONADO AQUI */
 
 export default function Home() {
+  const [isBooting, setIsBooting] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggingOff, setIsLoggingOff] = useState(false);
+  
+  const [iconeSelecionado, setIconeSelecionado] = useState<string | null>(null);
+  const [janelasAbertas, setJanelasAbertas] = useState<string[]>([]);
+  const [focoZIndex, setFocoZIndex] = useState<{ [key: string]: number }>({});
+  const [proximoZ, setProximoZ] = useState(100);
+
+  const abrirJanela = (nome: string) => {
+    if (!janelasAbertas.includes(nome)) setJanelasAbertas([...janelasAbertas, nome]);
+    setFocoZIndex({ ...focoZIndex, [nome]: proximoZ });
+    setProximoZ(proximoZ + 1);
+    setIconeSelecionado(null);
+  };
+
+  const fecharJanela = (nome: string) => setJanelasAbertas(janelasAbertas.filter(j => j !== nome));
+
+  const trazerParaFrente = (nome: string) => {
+    setFocoZIndex({ ...focoZIndex, [nome]: proximoZ });
+    setProximoZ(proximoZ + 1);
+  };
+
+  if (isBooting) return <BootScreen onFinished={() => setIsBooting(false)} />;
+  
+  /* 2. ROTEADOR DE LOGIN ADICIONADO AQUI */
+  if (!isLoggedIn) return <LoginScreen onLogin={() => setIsLoggedIn(true)} />; 
+  
+  if (isLoggingOff) return <ShutdownScreen />;
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <main className="w-full h-screen relative overflow-hidden" onClick={() => setIconeSelecionado(null)}>
+      
+      {/* 1. ÍCONES DA ÁREA DE TRABALHO */}
+      <div style={{ display: 'flex', flexDirection: 'column', padding: '10px', height: 'calc(100vh - 35px)', flexWrap: 'wrap', alignContent: 'flex-start' }}>
+        <DesktopIcon imgSrc="https://win98icons.alexmeub.com/icons/png/directory_closed-4.png" label="Meus Projetos" isSelected={iconeSelecionado === "Projetos"} onClick={() => setIconeSelecionado("Projetos")} onDoubleClick={() => abrirJanela("Projetos")} />
+        <DesktopIcon imgSrc="https://win98icons.alexmeub.com/icons/png/html-0.png" label="curriculo.html" isSelected={iconeSelecionado === "Currículo"} onClick={() => setIconeSelecionado("Currículo")} onDoubleClick={() => abrirJanela("CurriculoHTML")} />
+        <DesktopIcon imgSrc="https://win98icons.alexmeub.com/icons/png/msg_error-0.png" label="Nao_Abra.exe" isSelected={iconeSelecionado === "Virus"} onClick={() => setIconeSelecionado("Virus")} onDoubleClick={() => abrirJanela("Virus")} />
+      </div>
+
+      {/* 2. JANELA DO CURRÍCULO (Agora sim, dentro da WindowBox!) */}
+      {janelasAbertas.includes("CurriculoHTML") && (
+        <WindowBox title="Visualizador - curriculo.html" icon="📄" onClose={() => fecharJanela("CurriculoHTML")} zIndex={focoZIndex["CurriculoHTML"]} onFocus={() => trazerParaFrente("CurriculoHTML")}>
+          <iframe src="/curriculo.html" style={{ width: '100%', height: '100%', border: 'none', background: '#fff' }} />
+        </WindowBox>
+      )}
+
+      {/* 3. JANELA DA PASTA DE PROJETOS */}
+      {janelasAbertas.includes("Projetos") && (
+        <WindowBox title="Meus Projetos" icon="📁" onClose={() => fecharJanela("Projetos")} zIndex={focoZIndex["Projetos"]} onFocus={() => trazerParaFrente("Projetos")}>
+          <div style={{ background: '#dfdfdf', padding: '4px 8px', borderBottom: '1px solid #888', fontSize: '12px', color: 'black' }}>
+            Endereço: <b>C:\Users\Visitante\Projetos</b>
+          </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', padding: '10px' }} onClick={(e) => { e.stopPropagation(); setIconeSelecionado(null); }}>
+            <DesktopIcon imgSrc="https://win98icons.alexmeub.com/icons/png/network_internet_pcs_installer-2.png" label="Monitoramento" isDarkText isSelected={iconeSelecionado === "Monitoramento"} onClick={() => setIconeSelecionado("Monitoramento")} onDoubleClick={() => abrirJanela("MonitoramentoVideo")} />
+            <DesktopIcon imgSrc="https://win98icons.alexmeub.com/icons/png/processor-0.png" label="SystemPulse" isDarkText isSelected={iconeSelecionado === "SystemPulse"} onClick={() => setIconeSelecionado("SystemPulse")} onDoubleClick={() => abrirJanela("SystemPulseVideo")} />
+            <DesktopIcon imgSrc="https://win98icons.alexmeub.com/icons/png/joystick-0.png" label="GameDesvio" isDarkText isSelected={iconeSelecionado === "GameDesvio"} onClick={() => setIconeSelecionado("GameDesvio")} onDoubleClick={() => abrirJanela("GameDesvioVideo")} />
+          </div>
+        </WindowBox>
+      )}
+
+      {/* 4. JANELAS DOS VÍDEOS */}
+      {janelasAbertas.includes("MonitoramentoVideo") && (
+        <WindowBox title="Sistema de Monitoramento" icon="🖥️" onClose={() => fecharJanela("MonitoramentoVideo")} zIndex={focoZIndex["MonitoramentoVideo"]} onFocus={() => trazerParaFrente("MonitoramentoVideo")}>
+          <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#000' }}>
+            <video src="/sistema-de-monitoramento.mp4" autoPlay loop muted playsInline style={{ flex: 1, minHeight: 0, width: '100%', objectFit: 'contain' }} />
+            <div style={{ flexShrink: 0, padding: '8px', background: '#c0c0c0', borderTop: '2px solid #fff', textAlign: 'center' }}>
+              <button onClick={() => window.open('https://github.com/SecreTavin/Sistema-de-monitoramento-de-filtros-de-manga-industriais', '_blank')} style={{ fontWeight: 'bold' }}>🌐 Ver Código no GitHub</button>
+            </div>
+          </div>
+        </WindowBox>
+      )}
+
+      {janelasAbertas.includes("SystemPulseVideo") && (
+        <WindowBox title="System Pulse" icon="⚙️" onClose={() => fecharJanela("SystemPulseVideo")} defaultPosition={{ x: 100, y: 100 }} zIndex={focoZIndex["SystemPulseVideo"]} onFocus={() => trazerParaFrente("SystemPulseVideo")}>
+          <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#000' }}>
+            <video src="/system-pulse.mp4" autoPlay loop muted playsInline style={{ flex: 1, minHeight: 0, width: '100%', objectFit: 'contain' }} />
+            <div style={{ flexShrink: 0, padding: '8px', background: '#c0c0c0', borderTop: '2px solid #fff', textAlign: 'center' }}>
+              <button onClick={() => window.open('https://github.com/SecreTavin/System-Pulse', '_blank')} style={{ fontWeight: 'bold' }}>🌐 Ver Código no GitHub</button>
+            </div>
+          </div>
+        </WindowBox>
+      )}
+
+      {janelasAbertas.includes("GameDesvioVideo") && (
+        <WindowBox title="Game Desvio" icon="🕹️" onClose={() => fecharJanela("GameDesvioVideo")} defaultPosition={{ x: 150, y: 150 }} zIndex={focoZIndex["GameDesvioVideo"]} onFocus={() => trazerParaFrente("GameDesvioVideo")}>
+          <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#000' }}>
+            <video src="/gamepython.mp4" autoPlay loop muted playsInline style={{ flex: 1, minHeight: 0, width: '100%', objectFit: 'contain' }} />
+            <div style={{ flexShrink: 0, padding: '8px', background: '#c0c0c0', borderTop: '2px solid #fff', textAlign: 'center' }}>
+              <button onClick={() => window.open('https://github.com/SecreTavin/Game_desvio_python', '_blank')} style={{ fontWeight: 'bold' }}>🌐 Ver Código no GitHub</button>
+            </div>
+          </div>
+        </WindowBox>
+      )}
+
+      {/* 5. TELA AZUL DA MORTE */}
+      {janelasAbertas.includes("Virus") && <BSOD onClose={() => fecharJanela("Virus")} />}
+
+      {/* 6. BARRA DE TAREFAS */}
+      <Taskbar onShutdown={() => setIsLoggingOff(true)} />
+
+    </main>
   );
 }

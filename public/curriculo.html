@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currículo - Octávio Augusto</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        :root {
+            --bg-color: #1e1e1e; /* Cor de fundo do editor */
+        }
+
+        body {
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 40px;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            display: flex;
+            justify-content: center;
+        }
+
+        .editor-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            background-color: var(--bg-color);
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        /* Estilização da Foto */
+        .profile-img {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            width: 120px;
+            height: 120px;
+            border: 4px solid #333;
+            border-radius: 4px;
+            z-index: 10;
+            image-rendering: pixelated; /* Mantém a nitidez se for Pixel Art */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        pre[class*="language-"] {
+            margin: 0 !important;
+            background: transparent !important;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Ajustes para Impressão/PDF */
+        @media print {
+            body {
+                background-color: var(--bg-color) !important;
+                -webkit-print-color-adjust: exact;
+                padding: 0;
+            }
+            .editor-container {
+                box-shadow: none;
+                width: 100%;
+                max-width: none;
+            }
+            .no-print {
+                display: none;
+            }
+        }
+
+        .no-print {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #007acc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: sans-serif;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="no-print" onclick="window.print()">Salvar como PDF / Imprimir</button>
+
+    <div class="editor-container">
+        <img src="./ -3.jpg" alt="Profile" class="profile-img">
+
+        <pre><code class="language-python">"""
+SUMMARY:
+Estudante de Ciência da Computação, apaixonado por desenvolvimento backend e automação. 
+Com experiência em Python, SQL e frameworks como Django e FastAPI. 
+Disponível para oportunidades de crescimento e soluções inovadoras.
+"""
+
+from typing import List, Dict
+
+class INFORMACAO:
+    NOME = "Octávio Augusto Arruda dos Prazeres"
+    AGE = "21"
+    TITULO = "Computer Science Student | Backend Developer | Mathematician Enthusiast"
+    EMAIL = "arrudaoctavio178@gmail.com"
+    CONTATO = "+55 (31) 9 9578-8205"
+    LOCALIZACAO = {
+        "cidade": "Nova Lima",
+        "estado": "Minas Gerais",
+        "pais": "Brasil"
+    }
+    STATUS = "Em busca de estágio ou oportunidades de desenvolvimento backend, para aplicar meus conhecimentos e crescer profissionalmente."
+
+class REDES_SOCIAIS:
+
+    LINKEDIN = "https://www.linkedin.com/in/octavio-prazeres/"
+    GITHUB = "https://github.com/SecreTavin"
+
+class SKILLS:
+    LINGUAGENS = ["Python", "SQL", "JavaScript", "Swift"]
+    FRAMEWORKS = ["Django", "FastAPI", "Flask", "Matlab"]
+    FERRAMENTAS = ["Docker", "Kubernetes", "AWS", "Git", "Linux", "SAP", "PowerBI", "DBeaver"]
+    TECNOLOGIAS = ["REST APIs", "Microservices", "PostgreSQL"]
+    IDIOMAS = ["Português (Nativo)", "Inglês (Avançado)"]
+
+class EDUCACAO:
+    def graduacao(self):
+        curso = "Ciência da Computação"
+        instituicao = "Centro Universitário UNA"
+        periodo = ("2025", "2029")
+        return curso, instituicao, periodo
+    
+    def ensino_medio(self):
+        escola = "Escola Estadual Augusto de Lima"
+        periodo = ("2022")
+        return escola, periodo
+    
+    def Aprendizagem_mecanica(self):
+        curso = "Aprendizagem em manutenção industrial mecânica"
+        instituicao = "SENAI"
+        periodo = ("2022", "2023")
+        return curso, instituicao, periodo
+    
+    def robotica(self):
+        curso = "Iniciação profissional a Robótica"
+        instituicao = "SENAI"
+        periodo = ("2024")
+        return curso, instituicao, periodo
+    
+    def python(self):
+        curso = "Python"
+        instituicao = "Santander open academy"
+        periodo = ("2025")
+        return curso, instituicao, periodo
+    
+    def AI(self):
+        curso = "Artificial Intelligence Fundamentals"
+        instituicao = "IBM"
+        periodo = ("2025")
+        return curso, instituicao, periodo
+    
+    def english(self):
+        curso = "English(EUA)"
+        instituicao = "KNN Idiomas Brasil"
+        periodo = ("2025 até o momento")
+        return curso, instituicao, periodo
+    
+class EXPERIENCIA:
+
+    def aprendizagem(self):
+        cargo = "Mecânico de manutenção industrial - Aprendiz"
+        empresa = "RHIMagnesita"
+        periodo = ("2022", "2023")
+        responsabilidades = [
+            "Manutenção preventiva e corretiva de equipamentos industriais",
+            "Leitura e interpretação de desenhos técnicos",
+            "Colaboração com equipes multidisciplinares para garantir a eficiência operacional"
+        ]
+        return cargo, empresa, periodo, responsabilidades
+    
+    def efetivo(self):
+        cargo = "Mecânico de manutenção industrial - mecânico I"
+        empresa = "RHIMagnesita"
+        periodo = ("2024 até o momento")
+        responsabilidades = [
+            "Manutenção preventiva e corretiva de equipamentos industriais",
+            "Leitura e interpretação de desenhos técnicos",
+            "Colaboração com equipes multidisciplinares para garantir a eficiência operacional"
+        ]
+        return cargo, empresa, periodo, responsabilidades
+
+class PROJETOS:
+
+    def sistema_monitoramento(self):
+        nome = "Sistema de monitoramento de filtros de manga"
+        stack = ["Python", "JavaScript", "MYSQL", "HTML", "CSS"]
+        desc = "Sistema de cadastro e monitoramento de filtros de manga."
+        link = "https://github.com/SecreTavin/Sistema-de-monitoramento-de-filtros-de-manga-industriais"
+        return nome, stack, desc, link
+    
+    def system_pulse(self):
+        nome = "System Pulse"
+        stack = ["Swift"]
+        desc = "utilitário nativo para macOS que monitora o uso da CPU em tempo real diretamente da barra de menus."
+        link = "https://github.com/SecreTavin/System-Pulse"
+        return nome, stack, desc, link
+    
+    def machine_learning(self):
+        nome = "Pipeline de MachineLearning para prever gravidade de acidentes de trânsito. "
+        stack = ["Python", "Scikit-learn", "Pandas", "Matplotlib", "Numpy", "Seaborn", "MySQL", "statsmodels", "scipy",
+                 "randomizedsearchcv"]
+        desc = "Projeto de machine learning para prever gravidade de acidentes de trânsito, utilizando um pipeline completo de pré-processamento," \
+        " modelagem e avaliação de desempenho."
+        link = "https://github.com/SecreTavin/analise-preditiva-acidentes-transito-V2"
+        return nome, stack, desc, link
+    
+
+class API:
+    def hire_me(self) -> Dict:
+        return {
+            "status": 200,
+            "message": "Candidato pronto para o deploy! ⚡",
+            "response_time": "Fast"
+        }
+
+def secret_talent():
+    raise Exception("HiddenTalentError: This candidate has a secret talent that cannot be revealed! 🤫")
+
+if __name__ == "__main__":
+    print(">>> Currículo carregado com sucesso!")
+        </code></pre>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+</body>
+</html>

@@ -1,26 +1,20 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@font-face {
+  font-family: 'W95FA';
+  src: url('https://fonts.cdnfonts.com/s/72922/w95fa.woff') format('woff');
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  height: 100vh;
+  font-family: 'W95FA', Tahoma, Arial, sans-serif;
+  overflow: hidden; 
+  background-color: #008080; 
+  /* Fundo na pasta public é chamado direto na raiz */
+  background-image: url('public/windows-xp.jpg'); 
+  background-size: cover;
+  background-position: center;
 }
