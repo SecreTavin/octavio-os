@@ -14,7 +14,7 @@ body {
   overflow: hidden; 
   background-color: #008080; 
   /* Fundo na pasta public é chamado direto na raiz */
-  background-image: url('public/windows-xp.jpg'); 
+  background-image: url('/windows-xp.jpg'); 
   background-size: cover;
   background-position: center;
 }
