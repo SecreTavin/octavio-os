@@ -1,7 +1,7 @@
 "use client";
 
 interface DesktopIconProps {
-  imgSrc?: string; // NOVO: Caminho da imagem
+  imgSrc?: string; // Caminho da imagem
   icon?: string;   // Fallback para emoji
   label: string;
   isSelected: boolean;

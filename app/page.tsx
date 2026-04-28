@@ -7,7 +7,7 @@ import WindowBox from "../components/WindowBox";
 import BSOD from "../components/Bsod";
 import BootScreen from "../components/BootScreen";
 import ShutdownScreen from "../components/ShutdownScreen";
-import LoginScreen from "../components/LoginScreen"; /* 1. IMPORT ADICIONADO AQUI */
+import LoginScreen from "../components/LoginScreen";
 
 export default function Home() {
   const [isBooting, setIsBooting] = useState(true);
@@ -35,7 +35,7 @@ export default function Home() {
 
   if (isBooting) return <BootScreen onFinished={() => setIsBooting(false)} />;
   
-  /* 2. ROTEADOR DE LOGIN ADICIONADO AQUI */
+  /* 2. ROTEADOR DE LOGIN */
   if (!isLoggedIn) return <LoginScreen onLogin={() => setIsLoggedIn(true)} />; 
   
   if (isLoggingOff) return <ShutdownScreen />;
@@ -50,7 +50,7 @@ export default function Home() {
         <DesktopIcon imgSrc="https://win98icons.alexmeub.com/icons/png/msg_error-0.png" label="Nao_Abra.exe" isSelected={iconeSelecionado === "Virus"} onClick={() => setIconeSelecionado("Virus")} onDoubleClick={() => abrirJanela("Virus")} />
       </div>
 
-      {/* 2. JANELA DO CURRÍCULO (Agora sim, dentro da WindowBox!) */}
+      {/* 2. JANELA DO CURRÍCULO */}
       {janelasAbertas.includes("CurriculoHTML") && (
         <WindowBox title="Visualizador - curriculo.html" icon="📄" onClose={() => fecharJanela("CurriculoHTML")} zIndex={focoZIndex["CurriculoHTML"]} onFocus={() => trazerParaFrente("CurriculoHTML")}>
           <iframe src="/curriculo.html" style={{ width: '100%', height: '100%', border: 'none', background: '#fff' }} />
@@ -77,7 +77,7 @@ export default function Home() {
           <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#000' }}>
             <video src="/sistema-de-monitoramento.mp4" autoPlay loop muted playsInline style={{ flex: 1, minHeight: 0, width: '100%', objectFit: 'contain' }} />
             <div style={{ flexShrink: 0, padding: '8px', background: '#c0c0c0', borderTop: '2px solid #fff', textAlign: 'center' }}>
-              <button onClick={() => window.open('https://github.com/SecreTavin/Sistema-de-monitoramento-de-filtros-de-manga-industriais', '_blank')} style={{ fontWeight: 'bold' }}>🌐 Ver Código no GitHub</button>
+              <button onClick={() => window.open('https://github.com/SecreTavin/Sistema-de-monitoramento-de-filtros-de-manga-industriais', '_blank')} style={{ fontWeight: 'bold' }}><img src={'https://win98icons.alexmeub.com/icons/png/recycle_bin_full_cool-5.png'} width="14" height="14" alt="GitHub" /> Ver Código no GitHub</button>
             </div>
           </div>
         </WindowBox>
@@ -88,7 +88,7 @@ export default function Home() {
           <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#000' }}>
             <video src="/system-pulse.mp4" autoPlay loop muted playsInline style={{ flex: 1, minHeight: 0, width: '100%', objectFit: 'contain' }} />
             <div style={{ flexShrink: 0, padding: '8px', background: '#c0c0c0', borderTop: '2px solid #fff', textAlign: 'center' }}>
-              <button onClick={() => window.open('https://github.com/SecreTavin/System-Pulse', '_blank')} style={{ fontWeight: 'bold' }}>🌐 Ver Código no GitHub</button>
+              <button onClick={() => window.open('https://github.com/SecreTavin/System-Pulse', '_blank')} style={{ fontWeight: 'bold' }}><img src={'https://win98icons.alexmeub.com/icons/png/recycle_bin_full_cool-5.png'} width="14" height="14" alt="GitHub" /> Ver Código no GitHub</button>
             </div>
           </div>
         </WindowBox>
@@ -99,13 +99,13 @@ export default function Home() {
           <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#000' }}>
             <video src="/gamepython.mp4" autoPlay loop muted playsInline style={{ flex: 1, minHeight: 0, width: '100%', objectFit: 'contain' }} />
             <div style={{ flexShrink: 0, padding: '8px', background: '#c0c0c0', borderTop: '2px solid #fff', textAlign: 'center' }}>
-              <button onClick={() => window.open('https://github.com/SecreTavin/Game_desvio_python', '_blank')} style={{ fontWeight: 'bold' }}>🌐 Ver Código no GitHub</button>
+              <button onClick={() => window.open('https://github.com/SecreTavin/Game_desvio_python', '_blank')} style={{ fontWeight: 'bold' }}><img src={'https://win98icons.alexmeub.com/icons/png/recycle_bin_full_cool-5.png'} width="14" height="14" alt="GitHub" /> Ver Código no GitHub</button>
             </div>
           </div>
         </WindowBox>
       )}
 
-      {/* 5. TELA AZUL DA MORTE */}
+      {/* 5. TELA AZUL DO BUG */}
       {janelasAbertas.includes("Virus") && <BSOD onClose={() => fecharJanela("Virus")} />}
 
       {/* 6. BARRA DE TAREFAS */}

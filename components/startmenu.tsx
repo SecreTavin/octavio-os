@@ -1,11 +1,9 @@
 "use client";
 
-// 1. AVISAMOS O TYPESCRIPT AQUI: O Menu agora exige a função de desligar
 interface StartMenuProps {
   onShutdown: () => void;
 }
 
-// 2. RECEBEMOS A FUNÇÃO AQUI NOS PARÊNTESES
 export default function StartMenu({ onShutdown }: StartMenuProps) {
   return (
     <div style={{
@@ -47,7 +45,6 @@ export default function StartMenu({ onShutdown }: StartMenuProps) {
         
         <hr style={{ margin: '5px 0' }}/>
         
-        {/* 3. COLOCAMOS O "onClick" AQUI PARA O BOTÃO FUNCIONAR */}
         <li onClick={onShutdown} style={{ padding: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', fontWeight: 'bold' }}>
           <img src="https://win98icons.alexmeub.com/icons/png/shut_down_cool-3.png" alt="Desligar" style={{ width: '16px', height: '16px' }} />
           Desligar Sistema...

@@ -6,7 +6,7 @@ export default function BootScreen({ onFinished }: { onFinished: () => void }) {
   const [loadingStep, setLoadingStep] = useState(0);
 
   useEffect(() => {
-    // Sequência de carregamento realista
+    // Sequência de carregamento
     const timers = [
       setTimeout(() => setLoadingStep(1), 600),
       setTimeout(() => setLoadingStep(2), 1400),
@@ -33,7 +33,6 @@ export default function BootScreen({ onFinished }: { onFinished: () => void }) {
       <br />
       <br />
       
-      {/* As linhas aparecem com o tempo! */}
       {loadingStep >= 1 && <p style={{ margin: '5px 0' }}>&gt; Carregando Drivers do Kernel... [OK]</p>}
       {loadingStep >= 2 && <p style={{ margin: '5px 0' }}>&gt; Inicializando Banco de Dados MySQL... [OK]</p>}
       {loadingStep >= 3 && <p style={{ margin: '5px 0' }}>&gt; Configurando Ambiente Python &amp; Swift... [OK]</p>}

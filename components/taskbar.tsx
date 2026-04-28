@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import StartMenu from "./startmenu";
 
-// AVISANDO O TYPESCRIPT: A Taskbar agora aceita a função onShutdown
 interface TaskbarProps {
   onShutdown: () => void;
 }

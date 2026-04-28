@@ -9,7 +9,6 @@ export default function LoginScreen({ onLogin }: { onLogin: () => void }) {
   const handleLogin = () => {
     setIsAuthenticating(true);
     
-    // Simula o tempo de um HD antigo lendo os dados do perfil (1.5 segundos)
     setTimeout(() => {
       onLogin();
     }, 1500);
@@ -44,11 +43,9 @@ export default function LoginScreen({ onLogin }: { onLogin: () => void }) {
               <p style={{ fontWeight: 'bold' }}>Carregando suas configurações pessoais...</p>
             </div>
           ) : (
-            /* FORMULÁRIO DE LOGIN NORMAL */
             <>
               <div style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
                 
-                {/* O seu User Profile - AGORA CENTRALIZADO */}
                 <div style={{ 
                   width: '60px', height: '60px', border: 'inset 0.2px', background: '#fff',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' 
