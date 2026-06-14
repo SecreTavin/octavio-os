@@ -109,9 +109,9 @@ export default function Home() {
       {janelasAbertas.includes("CancelOps") && (
         <WindowBox title="CancelOps" icon="💡" onClose={() => fecharJanela("CancelOps")} zIndex={focoZIndex["CancelOps"]} onFocus={() => trazerParaFrente("CancelOps")}>
           <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#000' }}>
-            <video src="/Monitoramento.mp4" autoPlay loop muted playsInline style={{ flex: 1, minHeight: 0, width: '100%', objectFit: 'contain' }} />
+            <video src="/Cancel-ops.mp4" autoPlay loop muted playsInline style={{ flex: 1, minHeight: 0, width: '100%', objectFit: 'contain' }} />
             <div style={{ flexShrink: 0, padding: '8px', background: '#c0c0c0', borderTop: '2px solid #fff', textAlign: 'center' }}>
-              <button onClick={() => window.open('https://github.com/SecreTavin/Sistema-de-monitoramento-de-filtros-de-manga-industriais', '_blank')} style={{ fontWeight: 'bold' }}><img src={'https://win98icons.alexmeub.com/icons/png/recycle_bin_full_cool-5.png'} width="14" height="14" alt="GitHub" /> Ver Código no GitHub</button>
+              <button onClick={() => window.open('https://github.com/SecreTavin/CancelOps', '_blank')} style={{ fontWeight: 'bold' }}><img src={'https://win98icons.alexmeub.com/icons/png/recycle_bin_full_cool-5.png'} width="14" height="14" alt="GitHub" /> Ver Código no GitHub</button>
             </div>
           </div>
         </WindowBox>
