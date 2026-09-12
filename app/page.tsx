@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Taskbar from "../components/taskbar";
 import DesktopIcon from "../components/DesktopIcon";
 import WindowBox from "../components/WindowBox";
@@ -9,16 +9,40 @@ import BootScreen from "../components/BootScreen";
 import ShutdownScreen from "../components/ShutdownScreen";
 import LoginScreen from "../components/LoginScreen";
 import Minesweeper from "../components/Minesweeper";
+import AdPopup from "../components/AdPopup";
+import { ANUNCIOS, VIRUS, type PopupConteudo } from "../components/popupConteudos";
+
+interface PopupInstancia {
+  id: number;
+  x: number;
+  y: number;
+  conteudo: PopupConteudo;
+  tipo: "anuncio" | "virus";
+}
+
+const REPLICAS_ONDA_VIRUS = 3;
+
+// Posição aleatória na tela, longe da taskbar.
+function posicaoAleatoria() {
+  return {
+    x: 20 + Math.random() * Math.max(0, window.innerWidth - 300),
+    y: 20 + Math.random() * Math.max(0, window.innerHeight - 250),
+  };
+}
 
 export default function Home() {
   const [isBooting, setIsBooting] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoggingOff, setIsLoggingOff] = useState(false);
-  
+
   const [iconeSelecionado, setIconeSelecionado] = useState<string | null>(null);
   const [janelasAbertas, setJanelasAbertas] = useState<string[]>([]);
   const [focoZIndex, setFocoZIndex] = useState<{ [key: string]: number }>({});
   const [proximoZ, setProximoZ] = useState(100);
+
+  const [popups, setPopups] = useState<PopupInstancia[]>([]);
+  const proximoPopupId = useRef(0);
+  const replicasVirusRestantes = useRef(0);
 
   const abrirJanela = (nome: string) => {
     if (!janelasAbertas.includes(nome)) setJanelasAbertas([...janelasAbertas, nome]);
@@ -27,12 +51,64 @@ export default function Home() {
     setIconeSelecionado(null);
   };
 
-  const fecharJanela = (nome: string) => setJanelasAbertas(janelasAbertas.filter(j => j !== nome));
+  const fecharJanela = (nome: string) => {
+    setJanelasAbertas(janelasAbertas.filter(j => j !== nome));
+    if (nome === "Virus") {
+      setPopups([]);
+      replicasVirusRestantes.current = 0;
+    }
+  };
 
   const trazerParaFrente = (nome: string) => {
     setFocoZIndex({ ...focoZIndex, [nome]: proximoZ });
     setProximoZ(proximoZ + 1);
   };
+
+  const abrirPopup = (conteudo: PopupConteudo, tipo: "anuncio" | "virus") => {
+    const { x, y } = posicaoAleatoria();
+    setPopups((atual) => [...atual, { id: proximoPopupId.current++, x, y, conteudo, tipo }]);
+  };
+
+  const fecharPopup = (id: number, tipo: "anuncio" | "virus") => {
+    setPopups((atual) => atual.filter((p) => p.id !== id));
+    // Durante a onda de "infecção", fechar um pop-up de vírus pode abrir outro no lugar.
+    if (tipo === "virus" && replicasVirusRestantes.current > 0) {
+      replicasVirusRestantes.current -= 1;
+      setTimeout(() => abrirPopup(VIRUS[Math.floor(Math.random() * VIRUS.length)], "virus"), 400);
+    }
+  };
+
+  // "Infecção": uma rajada de pop-ups de vírus seguida da tela azul.
+  const iniciarInfeccao = () => {
+    replicasVirusRestantes.current = REPLICAS_ONDA_VIRUS;
+    for (let i = 0; i < 4; i++) {
+      setTimeout(() => abrirPopup(VIRUS[Math.floor(Math.random() * VIRUS.length)], "virus"), i * 200);
+    }
+    setTimeout(() => abrirJanela("Virus"), 2600);
+  };
+
+  // Pop-ups de anúncio aparecendo sozinhos de tempos em tempos, como se o sistema já estivesse infectado.
+  useEffect(() => {
+    if (!isLoggedIn || isLoggingOff) return;
+    let cancelado = false;
+    let timerId: ReturnType<typeof setTimeout>;
+
+    const agendarProximo = () => {
+      const atraso = 25000 + Math.random() * 20000;
+      timerId = setTimeout(() => {
+        if (cancelado) return;
+        setPopups((atual) => {
+          if (atual.length >= 2) return atual;
+          const { x, y } = posicaoAleatoria();
+          return [...atual, { id: proximoPopupId.current++, x, y, conteudo: ANUNCIOS[Math.floor(Math.random() * ANUNCIOS.length)], tipo: "anuncio" }];
+        });
+        agendarProximo();
+      }, atraso);
+    };
+
+    agendarProximo();
+    return () => { cancelado = true; clearTimeout(timerId); };
+  }, [isLoggedIn, isLoggingOff]);
 
   if (isBooting) return <BootScreen onFinished={() => setIsBooting(false)} />;
   
@@ -48,7 +124,7 @@ export default function Home() {
       <div style={{ display: 'flex', flexDirection: 'column', padding: '10px', height: 'calc(100vh - 35px)', flexWrap: 'wrap', alignContent: 'flex-start' }}>
         <DesktopIcon imgSrc="https://win98icons.alexmeub.com/icons/png/directory_closed-4.png" label="Meus Projetos" isSelected={iconeSelecionado === "Projetos"} onClick={() => setIconeSelecionado("Projetos")} onDoubleClick={() => abrirJanela("Projetos")} />
         <DesktopIcon imgSrc="https://win98icons.alexmeub.com/icons/png/html-0.png" label="curriculo.html" isSelected={iconeSelecionado === "Currículo"} onClick={() => setIconeSelecionado("Currículo")} onDoubleClick={() => abrirJanela("CurriculoHTML")} />
-        <DesktopIcon imgSrc="https://win98icons.alexmeub.com/icons/png/msg_error-0.png" label="Nao_Abra.exe" isSelected={iconeSelecionado === "Virus"} onClick={() => setIconeSelecionado("Virus")} onDoubleClick={() => abrirJanela("Virus")} />
+        <DesktopIcon imgSrc="https://win98icons.alexmeub.com/icons/png/msg_error-0.png" label="Nao_Abra.exe" isSelected={iconeSelecionado === "Virus"} onClick={() => setIconeSelecionado("Virus")} onDoubleClick={() => iniciarInfeccao()} />
         <DesktopIcon imgSrc="https://win98icons.alexmeub.com/icons/png/minesweeper-0.png" label="Campo Minado" isSelected={iconeSelecionado === "CampoMinado"} onClick={() => setIconeSelecionado("CampoMinado")} onDoubleClick={() => abrirJanela("CampoMinado")} />
       </div>
 
@@ -131,6 +207,11 @@ export default function Home() {
 
       {/* 6. BARRA DE TAREFAS */}
       <Taskbar onShutdown={() => setIsLoggingOff(true)} />
+
+      {/* 7. POP-UPS DE ANÚNCIO / VÍRUS */}
+      {popups.map((p) => (
+        <AdPopup key={p.id} conteudo={p.conteudo} x={p.x} y={p.y} onClose={() => fecharPopup(p.id, p.tipo)} />
+      ))}
 
     </main>
   );
