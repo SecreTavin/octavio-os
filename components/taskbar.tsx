@@ -15,7 +15,7 @@ export default function Taskbar({ onShutdown }: TaskbarProps) {
     const atualizarRelogio = () => {
       const agora = new Date();
       let horas = agora.getHours();
-      let minutos = agora.getMinutes();
+      const minutos = agora.getMinutes();
       const ampm = horas >= 12 ? 'PM' : 'AM';
       
       horas = horas % 12;

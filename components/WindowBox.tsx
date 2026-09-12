@@ -9,18 +9,22 @@ interface WindowBoxProps {
   onClose: () => void;
   children: React.ReactNode;
   defaultPosition?: { x: number; y: number };
+  defaultSize?: { width: number; height: number };
   zIndex?: number;
   onFocus?: () => void;
 }
 
-export default function WindowBox({ title, icon = "📁", onClose, children, defaultPosition = { x: 50, y: 50 }, zIndex = 100, onFocus }: WindowBoxProps) {
+export default function WindowBox({ title, icon = "📁", onClose, children, defaultPosition = { x: 50, y: 50 }, defaultSize = { width: 600, height: 450 }, zIndex = 100, onFocus }: WindowBoxProps) {
   const [isMaximized, setIsMaximized] = useState(false);
-  const [rndState, setRndState] = useState({ x: defaultPosition.x, y: defaultPosition.y, width: 600, height: 450 });
-  const [winSize, setWinSize] = useState({ width: 800, height: 600 });
-
+  const [rndState, setRndState] = useState({ x: defaultPosition.x, y: defaultPosition.y, width: defaultSize.width, height: defaultSize.height });
   // Pega o tamanho EXATO da tela em pixels para a tela cheia não bugar
+  const [winSize, setWinSize] = useState(() =>
+    typeof window !== 'undefined'
+      ? { width: window.innerWidth, height: window.innerHeight - 35 }
+      : { width: 800, height: 600 }
+  );
+
   useEffect(() => {
-    setWinSize({ width: window.innerWidth, height: window.innerHeight - 35 });
     const handleResize = () => setWinSize({ width: window.innerWidth, height: window.innerHeight - 35 });
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);

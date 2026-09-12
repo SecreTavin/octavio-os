@@ -15,10 +15,11 @@ export default function ProjectVideo({ title, src }: ProjectVideoProps) {
   const toggleFullScreen = () => {
     const video = videoRef.current;
     if (video) {
+      const videoComSafari = video as HTMLVideoElement & { webkitRequestFullscreen?: () => void };
       if (video.requestFullscreen) {
         video.requestFullscreen();
-      } else if ((video as any).webkitRequestFullscreen) { /* Safari */
-        (video as any).webkitRequestFullscreen();
+      } else if (videoComSafari.webkitRequestFullscreen) { /* Safari */
+        videoComSafari.webkitRequestFullscreen();
       }
     }
   };
