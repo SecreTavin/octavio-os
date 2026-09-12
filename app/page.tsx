@@ -8,6 +8,7 @@ import BSOD from "../components/Bsod";
 import BootScreen from "../components/BootScreen";
 import ShutdownScreen from "../components/ShutdownScreen";
 import LoginScreen from "../components/LoginScreen";
+import Minesweeper from "../components/Minesweeper";
 
 export default function Home() {
   const [isBooting, setIsBooting] = useState(true);
@@ -48,6 +49,7 @@ export default function Home() {
         <DesktopIcon imgSrc="https://win98icons.alexmeub.com/icons/png/directory_closed-4.png" label="Meus Projetos" isSelected={iconeSelecionado === "Projetos"} onClick={() => setIconeSelecionado("Projetos")} onDoubleClick={() => abrirJanela("Projetos")} />
         <DesktopIcon imgSrc="https://win98icons.alexmeub.com/icons/png/html-0.png" label="curriculo.html" isSelected={iconeSelecionado === "Currículo"} onClick={() => setIconeSelecionado("Currículo")} onDoubleClick={() => abrirJanela("CurriculoHTML")} />
         <DesktopIcon imgSrc="https://win98icons.alexmeub.com/icons/png/msg_error-0.png" label="Nao_Abra.exe" isSelected={iconeSelecionado === "Virus"} onClick={() => setIconeSelecionado("Virus")} onDoubleClick={() => abrirJanela("Virus")} />
+        <DesktopIcon imgSrc="https://win98icons.alexmeub.com/icons/png/minesweeper-0.png" label="Campo Minado" isSelected={iconeSelecionado === "CampoMinado"} onClick={() => setIconeSelecionado("CampoMinado")} onDoubleClick={() => abrirJanela("CampoMinado")} />
       </div>
 
       {/* 2. JANELA DO CURRÍCULO */}
@@ -119,6 +121,13 @@ export default function Home() {
 
       {/* 5. TELA AZUL DO BUG */}
       {janelasAbertas.includes("Virus") && <BSOD onClose={() => fecharJanela("Virus")} />}
+
+      {/* 4.5 JANELA DO CAMPO MINADO */}
+      {janelasAbertas.includes("CampoMinado") && (
+        <WindowBox title="Campo Minado" icon="💣" onClose={() => fecharJanela("CampoMinado")} defaultPosition={{ x: 200, y: 60 }} defaultSize={{ width: 260, height: 400 }} zIndex={focoZIndex["CampoMinado"]} onFocus={() => trazerParaFrente("CampoMinado")}>
+          <Minesweeper />
+        </WindowBox>
+      )}
 
       {/* 6. BARRA DE TAREFAS */}
       <Taskbar onShutdown={() => setIsLoggingOff(true)} />
