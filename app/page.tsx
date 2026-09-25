@@ -146,6 +146,7 @@ export default function Home() {
             <DesktopIcon imgSrc="https://win98icons.alexmeub.com/icons/png/catalog_excl-1.png" label="SystemPulse" isDarkText isSelected={iconeSelecionado === "SystemPulse"} onClick={() => setIconeSelecionado("SystemPulse")} onDoubleClick={() => abrirJanela("SystemPulseVideo")} />
             <DesktopIcon imgSrc="https://win98icons.alexmeub.com/icons/png/joystick-0.png" label="GameDesvio" isDarkText isSelected={iconeSelecionado === "GameDesvio"} onClick={() => setIconeSelecionado("GameDesvio")} onDoubleClick={() => abrirJanela("GameDesvioVideo")} />
             <DesktopIcon imgSrc="https://win98icons.alexmeub.com/icons/png/address_book_pad_users.png" label="CancelOps" isDarkText isSelected={iconeSelecionado === "CancelOps"} onClick={() => setIconeSelecionado("CancelOps")} onDoubleClick={() => abrirJanela("CancelOps")} />
+            <DesktopIcon imgSrc="https://win98icons.alexmeub.com/icons/png/write_file-1.png" label="ConversorDocs" isDarkText isSelected={iconeSelecionado === "ConversorDocs"} onClick={() => setIconeSelecionado("ConversorDocs")} onDoubleClick={() => abrirJanela("ConversorDocs")} />
           </div>
         </WindowBox>
       )}
@@ -190,6 +191,50 @@ export default function Home() {
             <video src="/Cancel-ops.mp4" autoPlay loop muted playsInline style={{ flex: 1, minHeight: 0, width: '100%', objectFit: 'contain' }} />
             <div style={{ flexShrink: 0, padding: '8px', background: '#c0c0c0', borderTop: '2px solid #fff', textAlign: 'center' }}>
               <button onClick={() => window.open('https://github.com/SecreTavin/CancelOps', '_blank')} style={{ fontWeight: 'bold' }}><img src={'https://win98icons.alexmeub.com/icons/png/recycle_bin_full_cool-5.png'} width="14" height="14" alt="GitHub" /> Ver Código no GitHub</button>
+            </div>
+          </div>
+        </WindowBox>
+      )}
+
+      {/* 4.6 JANELA DO CONVERSOR DE DOCUMENTOS (sem vídeo — app desktop, card de descrição) */}
+      {janelasAbertas.includes("ConversorDocs") && (
+        <WindowBox title="Conversor de Documentos" icon="🔄" onClose={() => fecharJanela("ConversorDocs")} defaultPosition={{ x: 120, y: 70 }} defaultSize={{ width: 420, height: 500 }} zIndex={focoZIndex["ConversorDocs"]} onFocus={() => trazerParaFrente("ConversorDocs")}>
+          <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#fff', padding: '16px', boxSizing: 'border-box', overflow: 'auto' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
+              <img src="https://win98icons.alexmeub.com/icons/png/write_file-1.png" width="32" height="32" alt="Conversor de Documentos" />
+              <div>
+                <div style={{ fontWeight: 'bold', fontSize: '15px' }}>Conversor de Documentos</div>
+                <div style={{ fontSize: '11px', color: '#555' }}>App desktop · Python</div>
+              </div>
+            </div>
+
+            <p style={{ fontSize: '12px', lineHeight: '1.5', margin: '0 0 12px 0' }}>
+              Ferramenta 100% offline pra converter e manipular arquivos sem depender de
+              sites como o iLovePDF — nenhum documento sai do computador, o que importa
+              quando o arquivo tem dado sensível.
+            </p>
+
+            <div style={{ background: '#f0f0f0', border: '1px solid #ccc', padding: '10px 12px', marginBottom: '12px' }}>
+              <div style={{ fontWeight: 'bold', fontSize: '11px', marginBottom: '6px' }}>O que faz:</div>
+              <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '11px', lineHeight: '1.6' }}>
+                <li>PDF ⇄ Word, Excel e PowerPoint (via LibreOffice headless)</li>
+                <li>Imagens ⇄ PDF — juntar em PDF ou extrair páginas como imagem</li>
+                <li>Juntar, dividir, comprimir e rotacionar PDFs</li>
+                <li>Proteger/remover senha e adicionar marca d&apos;água</li>
+                <li>OCR em PDFs escaneados (gera PDF pesquisável ou Word)</li>
+                <li>Conversão entre JPG, PNG, WEBP e BMP</li>
+                <li>Arrastar e soltar, com conversão em lote</li>
+              </ul>
+            </div>
+
+            <p style={{ fontSize: '11px', color: '#555', margin: '0 0 16px 0' }}>
+              <b>Stack:</b> Python · CustomTkinter · LibreOffice headless · Tesseract OCR
+            </p>
+
+            <div style={{ marginTop: 'auto', textAlign: 'center' }}>
+              <button onClick={() => window.open('https://github.com/SecreTavin/document-converter', '_blank')} style={{ fontWeight: 'bold' }}>
+                <img src={'https://win98icons.alexmeub.com/icons/png/recycle_bin_full_cool-5.png'} width="14" height="14" alt="GitHub" /> Ver Código no GitHub
+              </button>
             </div>
           </div>
         </WindowBox>
