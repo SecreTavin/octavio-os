@@ -10,6 +10,7 @@ import ShutdownScreen from "../components/ShutdownScreen";
 import LoginScreen from "../components/LoginScreen";
 import Minesweeper from "../components/Minesweeper";
 import AdPopup from "../components/AdPopup";
+import ProjectCard from "../components/ProjectCard";
 import { ANUNCIOS, VIRUS, type PopupConteudo } from "../components/popupConteudos";
 
 interface PopupInstancia {
@@ -21,6 +22,7 @@ interface PopupInstancia {
 }
 
 const REPLICAS_ONDA_VIRUS = 3;
+const URL_METAL_RUSH = "https://metal-rush.secretavin.workers.dev";
 
 // Posição aleatória na tela, longe da taskbar.
 function posicaoAleatoria() {
@@ -87,9 +89,12 @@ export default function Home() {
     setTimeout(() => abrirJanela("Virus"), 2600);
   };
 
+  // Durante uma partida de Metal Rush os anúncios ficam suspensos: o jogo não pausa sozinho.
+  const jogandoMetalRush = janelasAbertas.includes("MetalRush");
+
   // Pop-ups de anúncio aparecendo sozinhos de tempos em tempos, como se o sistema já estivesse infectado.
   useEffect(() => {
-    if (!isLoggedIn || isLoggingOff) return;
+    if (!isLoggedIn || isLoggingOff || jogandoMetalRush) return;
     let cancelado = false;
     let timerId: ReturnType<typeof setTimeout>;
 
@@ -108,7 +113,7 @@ export default function Home() {
 
     agendarProximo();
     return () => { cancelado = true; clearTimeout(timerId); };
-  }, [isLoggedIn, isLoggingOff]);
+  }, [isLoggedIn, isLoggingOff, jogandoMetalRush]);
 
   if (isBooting) return <BootScreen onFinished={() => setIsBooting(false)} />;
   
@@ -147,6 +152,10 @@ export default function Home() {
             <DesktopIcon imgSrc="https://win98icons.alexmeub.com/icons/png/joystick-0.png" label="GameDesvio" isDarkText isSelected={iconeSelecionado === "GameDesvio"} onClick={() => setIconeSelecionado("GameDesvio")} onDoubleClick={() => abrirJanela("GameDesvioVideo")} />
             <DesktopIcon imgSrc="https://win98icons.alexmeub.com/icons/png/address_book_pad_users.png" label="CancelOps" isDarkText isSelected={iconeSelecionado === "CancelOps"} onClick={() => setIconeSelecionado("CancelOps")} onDoubleClick={() => abrirJanela("CancelOps")} />
             <DesktopIcon imgSrc="https://win98icons.alexmeub.com/icons/png/write_file-1.png" label="ConversorDocs" isDarkText isSelected={iconeSelecionado === "ConversorDocs"} onClick={() => setIconeSelecionado("ConversorDocs")} onDoubleClick={() => abrirJanela("ConversorDocs")} />
+            <DesktopIcon imgSrc="https://win98icons.alexmeub.com/icons/png/joystick-2.png" label="MetalRush" isDarkText isSelected={iconeSelecionado === "MetalRush"} onClick={() => setIconeSelecionado("MetalRush")} onDoubleClick={() => abrirJanela("MetalRush")} />
+            <DesktopIcon imgSrc="https://win98icons.alexmeub.com/icons/png/users-1.png" label="EuDuvido" isDarkText isSelected={iconeSelecionado === "EuDuvido"} onClick={() => setIconeSelecionado("EuDuvido")} onDoubleClick={() => abrirJanela("EuDuvido")} />
+            <DesktopIcon imgSrc="https://win98icons.alexmeub.com/icons/png/tree-0.png" label="Gardenia" isDarkText isSelected={iconeSelecionado === "Gardenia"} onClick={() => setIconeSelecionado("Gardenia")} onDoubleClick={() => abrirJanela("Gardenia")} />
+            <DesktopIcon imgSrc="https://win98icons.alexmeub.com/icons/png/chart1-0.png" label="AcidentesPRF" isDarkText isSelected={iconeSelecionado === "AcidentesPRF"} onClick={() => setIconeSelecionado("AcidentesPRF")} onDoubleClick={() => abrirJanela("AcidentesPRF")} />
           </div>
         </WindowBox>
       )}
@@ -196,45 +205,109 @@ export default function Home() {
         </WindowBox>
       )}
 
-      {/* 4.6 JANELA DO CONVERSOR DE DOCUMENTOS (sem vídeo — app desktop, card de descrição) */}
+      {/* 4.6 CARDS DE PROJETO (projetos sem vídeo de demo) */}
       {janelasAbertas.includes("ConversorDocs") && (
         <WindowBox title="Conversor de Documentos" icon="🔄" onClose={() => fecharJanela("ConversorDocs")} defaultPosition={{ x: 120, y: 70 }} defaultSize={{ width: 420, height: 500 }} zIndex={focoZIndex["ConversorDocs"]} onFocus={() => trazerParaFrente("ConversorDocs")}>
-          <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#fff', padding: '16px', boxSizing: 'border-box', overflow: 'auto' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-              <img src="https://win98icons.alexmeub.com/icons/png/write_file-1.png" width="32" height="32" alt="Conversor de Documentos" />
-              <div>
-                <div style={{ fontWeight: 'bold', fontSize: '15px' }}>Conversor de Documentos</div>
-                <div style={{ fontSize: '11px', color: '#555' }}>App desktop · Python</div>
+          <ProjectCard
+            icone="https://win98icons.alexmeub.com/icons/png/write_file-1.png"
+            titulo="Conversor de Documentos"
+            subtitulo="App desktop · Python"
+            descricao="Ferramenta 100% offline pra converter e manipular arquivos sem depender de sites como o iLovePDF — nenhum documento sai do computador, o que importa quando o arquivo tem dado sensível."
+            tituloDestaques="O que faz:"
+            destaques={[
+              "PDF ⇄ Word, Excel e PowerPoint (via LibreOffice headless)",
+              "Imagens ⇄ PDF — juntar em PDF ou extrair páginas como imagem",
+              "Juntar, dividir, comprimir e rotacionar PDFs",
+              "Proteger/remover senha e adicionar marca d'água",
+              "OCR em PDFs escaneados (gera PDF pesquisável ou Word)",
+              "Conversão entre JPG, PNG, WEBP e BMP",
+              "Arrastar e soltar, com conversão em lote",
+            ]}
+            stack="Python · CustomTkinter · LibreOffice headless · Tesseract OCR"
+            links={[{ rotulo: "Ver Código no GitHub", url: "https://github.com/SecreTavin/document-converter", tipo: "github" }]}
+          />
+        </WindowBox>
+      )}
+
+      {janelasAbertas.includes("EuDuvido") && (
+        <WindowBox title="Eu Duvido!" icon="🤝" onClose={() => fecharJanela("EuDuvido")} defaultPosition={{ x: 140, y: 60 }} defaultSize={{ width: 440, height: 480 }} zIndex={focoZIndex["EuDuvido"]} onFocus={() => trazerParaFrente("EuDuvido")}>
+          <ProjectCard
+            icone="https://win98icons.alexmeub.com/icons/png/users-1.png"
+            titulo="Eu Duvido!"
+            subtitulo="Web app · projeto acadêmico em grupo (A3 de Banco de Dados)"
+            descricao="Plataforma de desafios entre amigos: alguém propõe um desafio, o grupo coloca CP (a moeda do app) no pote e, quando a prova chega, um júri de amigos vota se ela vale. A nota da disciplina vem do banco — modelagem, constraints, transações e consultas."
+            tituloDestaques="Destaques do banco:"
+            destaques={[
+              "Apuração do júri e liquidação do pote numa única transação, dentro de procedure PostgreSQL",
+              "Ledger de CP append-only: trigger bloqueia UPDATE/DELETE, estorno é lançamento novo",
+              "Views de reconciliação que precisam ficar sempre vazias — se retornam linha, há bug contábil",
+              "CQRS: EF Core escreve, Dapper lê com SQL escrito à mão",
+              "Votação ao vivo via SignalR, disparada só depois do commit",
+              "Moderação dos desafios por IA (Groq)",
+            ]}
+            stack=".NET 10 · PostgreSQL · React + TypeScript · SignalR · MinIO · Docker"
+            links={[
+              { rotulo: "Abrir o Site", url: "https://euduvido.falveshub.com", tipo: "site" },
+              { rotulo: "Ver Código no GitHub", url: "https://github.com/SecreTavin/A3-banco-de-dados", tipo: "github" },
+            ]}
+          />
+        </WindowBox>
+      )}
+
+      {janelasAbertas.includes("Gardenia") && (
+        <WindowBox title="Gardenia" icon="🗡️" onClose={() => fecharJanela("Gardenia")} defaultPosition={{ x: 160, y: 80 }} defaultSize={{ width: 430, height: 450 }} zIndex={focoZIndex["Gardenia"]} onFocus={() => trazerParaFrente("Gardenia")}>
+          <ProjectCard
+            icone="https://win98icons.alexmeub.com/icons/png/tree-0.png"
+            titulo="Gardenia"
+            subtitulo="Jogo 3D · Godot 4.7"
+            selo="🚧 Em desenvolvimento · repositório privado"
+            descricao="Soulslike 3D com estética de PS2. Uma camponesa acorda meio vampira no fundo de um castelo e luta pra voltar ao vilarejo — só pra descobrir que os monstros são o próprio povo. É o meu primeiro jogo."
+            tituloDestaques="Já implementado:"
+            destaques={[
+              "Combate de postura estilo Sekiro: atacar gasta postura e o bloqueio converte dano de vida em postura",
+              "Parry com janela de 0,15 s e penalidade pra quem tenta no chute",
+              "Recurso de Sangue com recuperação no modelo Dark Souls (uma chance só)",
+              "Mapa das Criptas e o primeiro chefe, O Coveiro",
+              "Save e menus",
+              "Renderização interna em 854×480 pra segurar 60 fps num MacBook Air M1",
+            ]}
+            stack="Godot 4.7 · GDScript · Jolt Physics · GUT · Blender"
+          />
+        </WindowBox>
+      )}
+
+      {janelasAbertas.includes("AcidentesPRF") && (
+        <WindowBox title="Acidentes em Rodovias Federais" icon="📊" onClose={() => fecharJanela("AcidentesPRF")} defaultPosition={{ x: 180, y: 70 }} defaultSize={{ width: 440, height: 480 }} zIndex={focoZIndex["AcidentesPRF"]} onFocus={() => trazerParaFrente("AcidentesPRF")}>
+          <ProjectCard
+            icone="https://win98icons.alexmeub.com/icons/png/chart1-0.png"
+            titulo="Acidentes em Rodovias Federais"
+            subtitulo="Machine Learning · Python"
+            descricao="Risco de morte em acidentes e previsão do volume semanal, só com dados abertos da PRF: 687 mil acidentes, de 2017 a set/2026. É a v3, refeita do zero depois que descobri que o AUC de 0,98 da versão anterior vinha de vazamento de dados."
+            tituloDestaques="Como foi feito:"
+            destaques={[
+              "Só features disponíveis no momento em que o acidente é comunicado — colunas proibidas checadas por teste",
+              "Divisão temporal: treino 2017–2023, limiar escolhido em 2024, teste em 2025–2026",
+              "PR-AUC de 0,342 contra 0,072 do acaso, estável entre 2025 e 2026",
+              "Previsão semanal comparada com \"repetir a semana passada\" em 52 backtests",
+              "Diagnóstico do vazamento da v2 documentado no repositório",
+            ]}
+            stack="Python · pandas · scikit-learn · Parquet · pytest · uv"
+            links={[{ rotulo: "Ver Código (v3) no GitHub", url: "https://github.com/SecreTavin/analise-preditiva-acidentes-transito-V2/tree/v3-refacao", tipo: "github" }]}
+          />
+        </WindowBox>
+      )}
+
+      {/* 4.7 METAL RUSH — jogável dentro da janela */}
+      {janelasAbertas.includes("MetalRush") && (
+        <WindowBox title="Metal Rush" icon="🎮" onClose={() => fecharJanela("MetalRush")} defaultPosition={{ x: 90, y: 40 }} defaultSize={{ width: 660, height: 450 }} zIndex={focoZIndex["MetalRush"]} onFocus={() => trazerParaFrente("MetalRush")}>
+          <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#000' }}>
+            <iframe src={URL_METAL_RUSH} title="Metal Rush" allow="autoplay; fullscreen; gamepad" style={{ flex: 1, minHeight: 0, width: '100%', border: 'none' }} />
+            <div style={{ flexShrink: 0, padding: '6px 8px', background: '#c0c0c0', borderTop: '2px solid #fff', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', flexWrap: 'wrap' }}>
+              <span style={{ fontSize: '11px' }}>Clique no jogo · Setas/WASD movem · J atira · K pula</span>
+              <div style={{ display: 'flex', gap: '6px' }}>
+                <button onClick={() => window.open(URL_METAL_RUSH, '_blank')} style={{ fontWeight: 'bold' }}><img src={'https://win98icons.alexmeub.com/icons/png/world-1.png'} width="14" height="14" alt="" /> Abrir em Nova Aba</button>
+                <button onClick={() => window.open('https://github.com/SecreTavin/metal-rush', '_blank')} style={{ fontWeight: 'bold' }}><img src={'https://win98icons.alexmeub.com/icons/png/recycle_bin_full_cool-5.png'} width="14" height="14" alt="GitHub" /> Ver Código no GitHub</button>
               </div>
-            </div>
-
-            <p style={{ fontSize: '12px', lineHeight: '1.5', margin: '0 0 12px 0' }}>
-              Ferramenta 100% offline pra converter e manipular arquivos sem depender de
-              sites como o iLovePDF — nenhum documento sai do computador, o que importa
-              quando o arquivo tem dado sensível.
-            </p>
-
-            <div style={{ background: '#f0f0f0', border: '1px solid #ccc', padding: '10px 12px', marginBottom: '12px' }}>
-              <div style={{ fontWeight: 'bold', fontSize: '11px', marginBottom: '6px' }}>O que faz:</div>
-              <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '11px', lineHeight: '1.6' }}>
-                <li>PDF ⇄ Word, Excel e PowerPoint (via LibreOffice headless)</li>
-                <li>Imagens ⇄ PDF — juntar em PDF ou extrair páginas como imagem</li>
-                <li>Juntar, dividir, comprimir e rotacionar PDFs</li>
-                <li>Proteger/remover senha e adicionar marca d&apos;água</li>
-                <li>OCR em PDFs escaneados (gera PDF pesquisável ou Word)</li>
-                <li>Conversão entre JPG, PNG, WEBP e BMP</li>
-                <li>Arrastar e soltar, com conversão em lote</li>
-              </ul>
-            </div>
-
-            <p style={{ fontSize: '11px', color: '#555', margin: '0 0 16px 0' }}>
-              <b>Stack:</b> Python · CustomTkinter · LibreOffice headless · Tesseract OCR
-            </p>
-
-            <div style={{ marginTop: 'auto', textAlign: 'center' }}>
-              <button onClick={() => window.open('https://github.com/SecreTavin/document-converter', '_blank')} style={{ fontWeight: 'bold' }}>
-                <img src={'https://win98icons.alexmeub.com/icons/png/recycle_bin_full_cool-5.png'} width="14" height="14" alt="GitHub" /> Ver Código no GitHub
-              </button>
             </div>
           </div>
         </WindowBox>
